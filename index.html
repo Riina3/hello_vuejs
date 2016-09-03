@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="utf-8">
+        <script src="https://npmcdn.com/vue/dist/vue.js"></script>
+    </head>
+    <body>
+        <div id="app">
+        <!-- messageは同じ。v-modelの中に入力されたdata.messageは更新されて二カ所に描画される -->
+          {{ message }}
+          <!-- ここに入力されたらvueのmodelにデータを渡す。それぞれのアクション(v-on:ACTION_NAME)でmethodに登録されたfunctionを実行 -->
+          <input v-model="newTodo" v-on:keyup.enter="addTodo">
+          <input v-model="message">
+          <ul>
+              <li v-for="todo in todos">
+                  <span>{{ todo.text }}</span>
+                  <!-- $indexでfor分のindexを取得出来る -->
+                  <button v-on:click="removeTodo($index)">delete</button>
+              </li>
+          </ul>
+          <!-- vueのonclickイベント -->
+          <!-- <button v-on:click="reversemessage">┐(´-｀)┌</button> -->
+
+        </div>
+        <script type="text/javascript">
+            // vueインスタンス作成
+            new Vue({
+                // viewにおけるターゲット指定
+                el   : '#app',
+                // データ
+                data : {
+                    message : 'hello Vue.js',
+                    todos : [
+                        { text : 'aaaaaaaaaaaaaaaaaaa' },
+                        { text : 'bbbbbbbbbbbbbbbbbbb' },
+                        { text : 'ccccccccccccccccccc' }
+                    ],
+                    newTodo : '' // 新規追加用
+
+                },
+                methods : {
+                    reversemessage :function() {
+                        this.message = this.message.split('').reverse().join('')
+                    },
+                    addTodo : function() {
+                        // trim メソッドは両端の空白を取り除いた文字列を返します。trim はその文字列自身の値には影響を与えません（非破壊メソッド）
+                        var text = this.newTodo.trim()
+                        if (text) {
+                            // newTextが追加されたら、todosの配列の最後にpushで追加。
+                            this.todos.push({ text : text })
+                            // 追加されたのでnewTodoの項目から外す
+                            this.newTodo = ''
+                        }
+                    },
+                    removeTodo : function(index) {
+                        // The splice() method changes the content of an array by removing existing elements and/or adding new elements.
+                        // この形だとtodos(Array)からindex番目から1つ削除
+                        this.todos.splice(index, 1)
+                    }
+                }
+            })
+
+        </script>
+    </body>
+</html>
+
